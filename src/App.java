@@ -1,5 +1,6 @@
 import java.util.Scanner;
 
+import Estruturas.Cores;
 import Estruturas.EmptyStructureException;
 import Estruturas.Estrutura;
 import Estruturas.FullTreeException;
@@ -148,9 +149,9 @@ public class App{
     public static int menu_consulta(){
         System.out.println("Escolha o tipo de consulta: \n");
 
-        System.out.println("1 - Consulta por posição");
-        System.out.println("2 - Consulta por elemento");
-        System.out.println("3 - Sair");
+        System.out.println("(1) - Consulta por posição");
+        System.out.println("(2) - Consulta por elemento");
+        System.out.println("(3) - Sair");
 
         System.out.print("\nDigite a opção desejada: ");
 
@@ -229,13 +230,15 @@ public class App{
     //função principal
     public static void main(String[] args) {
         scan = new Scanner(System.in);
-        final String carregando = "Carregando...", saindo = "Saindo...";
-        //iniciando as variaveis de controle
-        boolean controleMenuOperacao = true, controleMenuTipo = true; //
-        boolean saiuMenuTipo = false;
-        boolean pesquisa = false;
 
-        int opcaoMenuPrincipal = 0, opcaoTipo = 0, opcaoOperacao = 0; //variáveis para armazenar as escolhas do usuário retornada pelos menus
+        final String CARREGANDO = Cores.ANSI_BLUE + "Carregando..." + Cores.ANSI_RESET, SAINDO = Cores.ANSI_YELLOW + "Saindo..." + Cores.ANSI_RESET;
+        final String OPCAOINVALIDA = Cores.ANSI_RED + "Opção inválida" + Cores.ANSI_RED;
+        final int MAXIMO_INT = 9999999;
+
+        //iniciando as variaveis de controle
+        boolean controleMenuOperacao = true, controleMenuTipo = true, saiuMenuTipo = false, pesquisa = false; 
+
+        int opcaoMenuPrincipal = 0, opcaoTipo = 0, opcaoOperacao = 0, opcaoConsulta = 0; //variáveis para armazenar as escolhas do usuário retornada pelos menus
 
         int temp_posicao = 0, temp_numero = 0; //variáveis temporarias 
         String temp_str = "";
@@ -248,12 +251,12 @@ public class App{
             opcaoMenuPrincipal = menu_principal(); //armazena o retorno inserido pelo usuario na função do menu principal em uma variavel para seu controle
 
             if(opcaoMenuPrincipal < 0 || opcaoMenuPrincipal > 6){ //tratamento de opções invalidas
-                System.out.println("Opção inválida");
-                loading(carregando);
+                System.out.println(OPCAOINVALIDA);
+                loading(CARREGANDO);
                 continue;
             }
             else if(opcaoMenuPrincipal == 6){ //selecionou a opção Sair
-                loading(saindo);
+                loading(SAINDO);
                 break;
             }
 
@@ -261,7 +264,7 @@ public class App{
 
             // Valida o valor passado pelo usuario
             if(opcaoMenuPrincipal != 5){
-                loading(carregando);
+                loading(CARREGANDO);
             }
 
             controleMenuTipo = true; //inicia o menu do tipo 
@@ -270,13 +273,13 @@ public class App{
                     while(true){  
                         opcaoTipo = menu_tipo();
                         if(opcaoTipo < 0 || opcaoTipo > 4){
-                            System.out.println("Opção inválida"); //tratamento de casos inválidos
-                            loading(carregando);
+                            System.out.println(OPCAOINVALIDA); //tratamento de casos inválidos
+                            loading(CARREGANDO);
                             saiuMenuTipo = false;
                             continue;
                         }
                         else if(opcaoTipo == 4){ // Realiza a saida do menu
-                            loading(saindo);  
+                            loading(SAINDO);  
                             saiuMenuTipo = true;
                             break;
                         }
@@ -290,9 +293,12 @@ public class App{
                         break;
                     }
                 }
+                else{
+                    strTipo = nome_tipo(1);
+                }
 
                 instanciaEstrutura(opcaoMenuPrincipal, opcaoTipo); //inicia a estrutura, passando o tipo correto
-                loading(carregando);
+                loading(CARREGANDO);
 
                 
                 controleMenuOperacao = true;
@@ -325,8 +331,15 @@ public class App{
                                         temp_numero = scan.nextInt();
                                     }
                                     catch(Exception e){
-                                        System.out.println("Não é um " + strTipo);
+                                        System.out.println(Cores.ANSI_RED + "Não é um " + strTipo + Cores.ANSI_RESET);
+                                        loading(CARREGANDO);
                                         scan.next();
+                                        break;
+                                    }
+
+                                    if(temp_numero > MAXIMO_INT){
+                                        System.out.println(Cores.ANSI_RED + "Número muito grande" + Cores.ANSI_RESET);
+                                        loading(CARREGANDO);
                                         break;
                                     }
                                 }
@@ -334,7 +347,14 @@ public class App{
                                     temp_str = scan.next();
                                 }
                                 else if(opcaoTipo == 3){
-                                    temp_char = scan.next().charAt(0);
+                                    temp_str = scan.next();
+                                    if(temp_str.length() > 1){
+                                        System.out.println(Cores.ANSI_RED + "Não é um caractere" + Cores.ANSI_RESET);
+                                        loading(CARREGANDO);
+                                        break;
+                                    }
+
+                                    temp_char = temp_str.charAt(0);
                                 }
 
                                 if(opcaoMenuPrincipal == 1 || opcaoMenuPrincipal == 2){ //Lista Sequencial ou Lista Encadeada
@@ -344,7 +364,8 @@ public class App{
                                         temp_posicao = scan.nextInt();
                                     }
                                     catch(Exception e){
-                                        System.out.println("Não é um inteiro");
+                                        System.out.println(Cores.ANSI_RED + "Não é um inteiro" + Cores.ANSI_RESET);
+                                        loading(CARREGANDO);
                                         scan.next();
                                         break;
                                     }
@@ -352,32 +373,32 @@ public class App{
 
                                 if(opcaoTipo == 1){
                                     if(estrutura.insert(temp_numero, temp_posicao)){ //realiza a inserção quando solicitado
-                                        System.out.println("Inserção bem-sucedida"); 
+                                        System.out.println(Cores.ANSI_GREEN + "Inserção bem-sucedida" + Cores.ANSI_RESET); 
                                     }
                                     else{
-                                        System.out.println("Inserção inválida"); //caso a operação de inserção retorne false, avisa que a inserção nao ocorreu
+                                        System.out.println(Cores.ANSI_RED + "Inserção inválida" + Cores.ANSI_RESET); //caso a operação de inserção retorne false, avisa que a inserção nao ocorreu
                                     }
                                 }
                                 else if(opcaoTipo == 2){
                                     if(estrutura.insert(temp_str, temp_posicao)){
-                                        System.out.println("Inserção bem-sucedida");
+                                        System.out.println(Cores.ANSI_GREEN + "Inserção bem-sucedida" + Cores.ANSI_RED);
                                     }
                                     else{
-                                        System.out.println("Inserção inválida");
+                                        System.out.println(Cores.ANSI_RED + "Inserção inválida" + Cores.ANSI_RESET);
                                     }
                                 }
                                 else if(opcaoTipo == 3){ //Valida a opção de inserlção pelo usuario
                                     if(estrutura.insert(temp_char, temp_posicao)){ // valida a inserção feita pelo usuario
-                                        System.out.println("Inserção bem-sucedida");
+                                        System.out.println(Cores.ANSI_GREEN + "Inserção bem-sucedida" + Cores.ANSI_RESET);
                                     }
                                     else{
-                                        System.out.println("Inserção inválida");
+                                        System.out.println(Cores.ANSI_RED + "Inserção inválida" + Cores.ANSI_RESET);
                                     }
                                 }
                             }
                             else if(opcaoMenuPrincipal == 5){ //Entra na aréa de manipulação de Arvore
-                                if(arvore.getSize() > 18){
-                                    System.out.println("Inserção inválida - Árvore com muitos elementos");
+                                if(arvore.getSize() > arvore.getMaximoElementos()){
+                                    System.out.println(Cores.ANSI_RED + "Inserção inválida - Árvore com muitos elementos" + Cores.ANSI_RESET);
                                     break;
                                 }
                                 
@@ -385,24 +406,31 @@ public class App{
                                     temp_numero = scan.nextInt();
                                 }
                                 catch(Exception e){
-                                    System.out.println("Não é um " + strTipo);
+                                    System.out.println(Cores.ANSI_RED + "Não é um " + strTipo + Cores.ANSI_RESET);
+                                    loading(CARREGANDO);
                                     scan.next();
+                                    break;
+                                }
+
+                                if(temp_numero > MAXIMO_INT){
+                                    System.out.println(Cores.ANSI_RED + "Número muito grande" + Cores.ANSI_RED);
+                                    loading(CARREGANDO);
                                     break;
                                 }
 
                                 try {
                                     if(arvore.insert(temp_numero)){
-                                        System.out.println("Inserção bem-sucedida"); //controla as inserções na arvore
+                                        System.out.println(Cores.ANSI_GREEN + "Inserção bem-sucedida" + Cores.ANSI_RESET); //controla as inserções na arvore
                                     }
                                     else{
-                                        System.out.println("Inserção inválida");
+                                        System.out.println(Cores.ANSI_RED + "Inserção inválida" + Cores.ANSI_RESET);
                                     }
                                 } catch (FullTreeException e) {
-                                    System.out.println("Árvore cheia"); //limita as inserções na arvore
+                                    System.out.println(Cores.ANSI_RED + "Árvore cheia" + Cores.ANSI_RESET); //limita as inserções na arvore
                                 }
                                 
                             }
-
+                            loading(CARREGANDO);
                             break;
                         case 2:
                             pesquisa = false;
@@ -412,49 +440,51 @@ public class App{
                                     temp_posicao = scan.nextInt();
                                 }
                                 catch(Exception e){
-                                    System.out.println("Posição inválida");
+                                    System.out.println(Cores.ANSI_RED + "Posição inválida" + Cores.ANSI_RED);
                                     scan.next();
                                     break;
                                 }
                             }else if(opcaoMenuPrincipal == 5){
-                                System.out.println("Não é possível remover elementos da árvore");
+                                System.out.println(Cores.ANSI_RED + "Não é possível remover elementos da árvore" + Cores.ANSI_RESET);
+                                loading(CARREGANDO);
                                 break;
                             }
 
                             try {
                                 estrutura.remove(temp_posicao);
                             } catch (InvalidPositionException e) {
-                                System.out.println("Posição inválida");
+                                System.out.println(Cores.ANSI_RED + "Posição inválida" + Cores.ANSI_RESET);
                             } catch (EmptyStructureException e) {
-                                System.out.println(strEstrutura + " vazia");
+                                System.out.println(Cores.ANSI_RED + strEstrutura + " vazia" + Cores.ANSI_RESET);
                             }
-                            
+
+                            loading(CARREGANDO);
                             break;
                         case 3:
                             pesquisa = true; //aciona a variável de controle para a operação de pesquisa
-                            int opcao = 0; 
+                            opcaoConsulta = 0; 
                             while (true){
-                                loading(carregando);
+                                loading(CARREGANDO);
                                 if((opcaoMenuPrincipal == 1 || opcaoMenuPrincipal == 2)){
-                                    opcao = menu_consulta();
+                                    opcaoConsulta = menu_consulta();
                                     
-                                    if (opcao == 1){
+                                    if (opcaoConsulta == 1){
                                         System.out.println("Digite a posição que deseja consultar na " + strEstrutura);
                                         try{
                                             temp_posicao = scan.nextInt();
                                         }
                                         catch(Exception e){
-                                            System.out.println("Posição inválida");
+                                            System.out.println(Cores.ANSI_RED + "Posição inválida" + Cores.ANSI_RESET);
                                             pesquisa = false;
                                             scan.next();
                                             break;
                                         }
 
-
+                                        loading(CARREGANDO + "\n");
                                         System.out.println(estrutura.print(true, temp_posicao, false, -1));
                                         break;
 
-                                    }else if(opcao == 2){
+                                    }else if(opcaoConsulta == 2){
                                         System.out.println("Digite o elemento que deseja consultar na " + strEstrutura);
 
                                         if(opcaoTipo == 1){
@@ -462,34 +492,35 @@ public class App{
                                                 temp_numero = scan.nextInt();
                                             }
                                             catch(Exception e){
-                                                System.out.println("Elemento inválido");
+                                                System.out.println(Cores.ANSI_RED + "Elemento inválido" + Cores.ANSI_RESET);
                                                 pesquisa = false;
                                                 scan.next();
                                                 break;
                                             }
 
+                                            loading(CARREGANDO + "\n");
                                             System.out.println(estrutura.print(false, -1, true, temp_numero));
                                         }
                                         else if(opcaoTipo == 2){
                                             temp_str = scan.next();
-
+                                            loading(CARREGANDO + "\n");
                                             System.out.println(estrutura.print(false, -1, true, temp_str));
                                         }
                                         else if(opcaoTipo == 3){
                                             temp_char = scan.next().charAt(0);
-
+                                            loading(CARREGANDO + "\n");
                                             System.out.println(estrutura.print(false, -1, true, temp_char));
                                         }
                 
 
                                         break;
                                     }
-                                    else if(opcao == 3){
-                                        loading(saindo);
+                                    else if(opcaoConsulta == 3){
+                                        loading(SAINDO);
                                         break;
                                     }
                                     else{
-                                        System.out.println("Opção inválida");
+                                        System.out.println(Cores.ANSI_RED + "Opção inválida" + Cores.ANSI_RESET);
                                     }
                                 }
                                 else if(opcaoMenuPrincipal == 3){
@@ -509,6 +540,7 @@ public class App{
                                         temp_numero = scan.nextInt();
                                     }
                                     catch(Exception e){
+                                        System.out.println(Cores.ANSI_RED + "Não é um número" + Cores.ANSI_RESET);
                                         pesquisa = false;
                                         scan.next();
                                         break;
@@ -526,24 +558,25 @@ public class App{
                             
                             if(opcaoMenuPrincipal != 5){
                                 estrutura.clear();
-                                System.out.println(strEstrutura + " limpada");
+                                System.out.println(strEstrutura + " limpada\n");
                             }
                             else{
                                 arvore.clearTree();
-                                System.out.println("Árvore limpada");
+                                System.out.println("Árvore limpada\n");
                             }
 
+                            loading(CARREGANDO);
                             break;
                         case 5:
                             pesquisa = false;
                             controleMenuOperacao = false; 
                             controleMenuTipo = false;
-                            loading(saindo);
+                            loading(SAINDO);
                             break;
 
                         default:
-                            System.out.println("Opção inválida");
-                            loading(carregando);
+                            System.out.println(Cores.ANSI_RED + "Opção inválida" + Cores.ANSI_RESET);
+                            loading(CARREGANDO);
                     }
                 }
             }

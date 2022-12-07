@@ -207,7 +207,7 @@ public class Queue<Type> extends Estrutura<Type>{
             }
             contador_nodos++;
         }
-
+        
         return ret;
     }
 }

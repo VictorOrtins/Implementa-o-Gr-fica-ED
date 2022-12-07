@@ -287,6 +287,7 @@ public class SimpleLinkedList<T> extends Estrutura<T>{
             return "Posição inválida\n";
         }
 
+
         String ret = "";
 
         String linha1 = "";

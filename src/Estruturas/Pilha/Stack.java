@@ -110,9 +110,9 @@ public class Stack<T> extends Estrutura<T>{
     @Override
     //Os dois últimos parâmetros são os que importam
     public String print(boolean pesquisaPosicao, int posicao, boolean pesquisaValor, T valor) {
-        SimpleNode<T> temp = top;
+        SimpleNode<T> auxiliar = top;
         
-        if(temp == null){
+        if(auxiliar == null){
             return "Pilha vazia\n";
         }
 
@@ -132,23 +132,23 @@ public class Stack<T> extends Estrutura<T>{
         final int TRACOS = 11;
         
 
-        while(temp != null){
+        while(auxiliar != null){
 
-            for(int i = 0; i < CENTRO/2; i++){
+            for(int i = 0; i < CENTRO/2; i++){ //shift
                 linha1 += " ";
                 linha2 += " ";
                 linha3 += " ";
                 linha4 += " ";
             }
 
-            temp_str = "| " + temp.getValue().toString() + " |";
+            temp_str = "| " + auxiliar.getValue().toString() + " |";
             linha2_length = temp_str.length();
 
             if(pesquisaValor && contador_nodos == 1 || pesquisaPosicao && posicao == contador_nodos){
-                temp_str = "| " + Cores.ANSI_GREEN + temp.getValue().toString() + Cores.ANSI_RESET + " |";
+                temp_str = "| " + Cores.ANSI_GREEN + auxiliar.getValue().toString() + Cores.ANSI_RESET + " |";
             }
             else{
-                temp_str = "| " + temp.getValue().toString() + " |";
+                temp_str = "| " + auxiliar.getValue().toString() + " |";
             }
 
             //Ficava um | a mais
@@ -164,15 +164,13 @@ public class Stack<T> extends Estrutura<T>{
             linha2 += temp_str;
 
             if(contador_nodos != size){
-                for(int i = 0; i < 3; i++){
+                for(int i = 0; i < 1; i++){
                     for(int j = 0; j < TRACOS/2; j++){
                         linha4 += " ";
                     }
 
                     linha4 += "|";
-                    if(i != 2){
-                        linha4 += "\n";
-                    }
+
                     //Botar os 2 últimos traços da conexão de nós no meio
                     for(int j = 0; j < CENTRO/2; j++){
                         linha4 += " ";
@@ -186,7 +184,7 @@ public class Stack<T> extends Estrutura<T>{
                 linha3 += "-";
             }
 
-            temp = temp.getNext();
+            auxiliar = auxiliar.getNext();
             ret += linha1 + "\n" + linha2 + "\n" + linha3 + "\n" + linha4 + "\n";
             linha1 = "";
             linha2 = "";
@@ -195,6 +193,7 @@ public class Stack<T> extends Estrutura<T>{
             
             contador_nodos++;
         }
+
 
         return ret;
     }

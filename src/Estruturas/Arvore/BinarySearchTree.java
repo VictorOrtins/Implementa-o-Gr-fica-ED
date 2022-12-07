@@ -5,7 +5,7 @@ import Estruturas.FullTreeException;
 
 public class BinarySearchTree {
 
-    private final int MAXIMO_ELEMENTOS = 18;
+    private static final int MAXIMO_ELEMENTOS = 18;
     private Node root;
     private int size;
 
@@ -129,10 +129,6 @@ public class BinarySearchTree {
         return showAscendingOrder(node.getLeft(), ret) + " " + node.getValue() + " "+ showAscendingOrder(node.getRight(), ret);
     }
 
-    public String print(boolean pesquisaValor, int valor){
-        return null;
-    }
-
     public void clearTree(){
         root = null;
         size = 0;
@@ -166,6 +162,7 @@ public class BinarySearchTree {
 
             if(pesquisaValor && valor == atual.getValue()){
                 System.out.println(Cores.ANSI_GREEN + atual.getValue() + Cores.ANSI_RESET);
+
             }
             else{
                 System.out.println(atual.getValue());
@@ -180,10 +177,10 @@ public class BinarySearchTree {
     public int getSize(){
         return size;
     }
-    
-    
-    
 
+    public int getMaximoElementos(){
+        return MAXIMO_ELEMENTOS;
+    }
     
 }
 

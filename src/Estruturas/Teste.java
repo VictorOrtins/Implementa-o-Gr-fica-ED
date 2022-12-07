@@ -9,18 +9,18 @@ import Estruturas.Arvore.BinarySearchTree;
 
 public class Teste {
     public static void main(String[] args) throws EmptyStructureException {
-         BinarySearchTree arvore = new BinarySearchTree();
+        // BinarySearchTree arvore = new BinarySearchTree();
 
-        arvore.insert(10);
-        arvore.insert(20);
-        arvore.insert(30);
-        arvore.insert(40);
-        arvore.insert(5);
-        arvore.insert(3);
-        arvore.insert(100);
-        arvore.insert(1);
+        // arvore.insert(10);
+        // arvore.insert(20);
+        // arvore.insert(30);
+        // arvore.insert(40);
+        // arvore.insert(5);
+        // arvore.insert(3);
+        // arvore.insert(100);
+        // arvore.insert(1);
 
-        arvore.exibir();
+        // arvore.exibir();
 
         // System.out.println(arvore.showAscendingOrder().print(true, 0));
         

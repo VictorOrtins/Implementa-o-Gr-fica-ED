@@ -222,8 +222,6 @@ public class ListaSeqGen<T> extends Estrutura<T>{
             }
 
 		}
-
-
 		return ret;
 		
 	}
