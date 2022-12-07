@@ -345,6 +345,11 @@ public class App{
                                 }
                                 else if(opcaoTipo == 2){
                                     temp_str = scan.next();
+                                    if(temp_str.length() > 7){
+                                        System.out.println(Cores.ANSI_RED + "String muito grande" + Cores.ANSI_RESET);
+                                        loading(CARREGANDO);
+                                        break;
+                                    }
                                 }
                                 else if(opcaoTipo == 3){
                                     temp_str = scan.next();
@@ -503,10 +508,23 @@ public class App{
                                         }
                                         else if(opcaoTipo == 2){
                                             temp_str = scan.next();
+
+                                            if(temp_str.length() > 7){
+                                                System.out.println(Cores.ANSI_RED + "String muito grande" + Cores.ANSI_RESET);
+                                                loading(CARREGANDO);
+                                                break;
+                                            }
+
                                             loading(CARREGANDO + "\n");
                                             System.out.println(estrutura.print(false, -1, true, temp_str));
                                         }
                                         else if(opcaoTipo == 3){
+                                            temp_str = scan.next();
+                                            if(temp_str.length() > 1){
+                                                System.out.println(Cores.ANSI_RED + "Não é um caractere" + Cores.ANSI_RESET);
+                                                pesquisa = false;
+                                                break;
+                                            }
                                             temp_char = scan.next().charAt(0);
                                             loading(CARREGANDO + "\n");
                                             System.out.println(estrutura.print(false, -1, true, temp_char));
@@ -558,11 +576,11 @@ public class App{
                             
                             if(opcaoMenuPrincipal != 5){
                                 estrutura.clear();
-                                System.out.println(strEstrutura + " limpada\n");
+                                System.out.println(strEstrutura + " limpa\n");
                             }
                             else{
                                 arvore.clearTree();
-                                System.out.println("Árvore limpada\n");
+                                System.out.println("Árvore limpa\n");
                             }
 
                             loading(CARREGANDO);
